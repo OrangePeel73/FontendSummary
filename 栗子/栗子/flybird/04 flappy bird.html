@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>爱创课堂-专业web前端培训</title>
+<style type="text/css">
+*{margin: 0;padding: 0;}
+body{background: #000;}
+#container{height: 548px; width: 1000px; background: -webkit-linear-gradient(top,rgb(0, 184, 245),rgb(0, 94, 135)); margin: 0 auto; position: relative;}
+#container div, canvas, h1{height: 548px; position: absolute; top: 0; left: 0; width: 100%;}
+.bg1{background: url(flappy/city.png) 0 208px repeat-x;}
+.bg2{background: url(flappy/trees.png) 0 285px repeat-x;}
+.bg3{background: url(flappy/ground.png) 0 500px repeat-x;}
+p{position: absolute; top: 10px; left: 10px; font-weight: bold; color: #ccc;}
+h1{text-align: center;}
+h1 span{display: inline-block; border: 1px solid rgba(0,0,0,0.8); border-radius: 5px; margin-top: 200px;}
+.statGame{width: 337px; height: 75px; background: rgba(0,0,0,0.3) url(flappy/begin.png) no-repeat; cursor: pointer;}
+.gameOver{display: none; width: 626px; height: 144px; background: rgba(0,0,0,0.3) url(flappy/over.png) no-repeat; margin-top: 170px;}
+#container h1 div{position: static;height: 50px;}
+h1 p{height: 50px; font-size: 40px; line-height: 50px; color: #fff; font-weight: bold; position: static; background: rgba(0,0,0,0.3); margin-top: 10px; border: 1px solid rgba(0,0,0,0.8); display: none; padding: 10px 30px;}
+canvas{height: 500px;}
+img{display: none;}
+</style>
+</head>
+<body>
+<div id="container">
+	<div class="bg1"></div>
+	<div class="bg2"></div>
+	<div class="bg3"></div>
+	<canvas width="1000" height="500"></canvas>
+	<p></p>
+	<h1>
+		<span class="statGame"></span>
+		<span class="gameOver"></span>
+		<div>
+			<p></p>
+		</div>
+	</h1>
+</div>
+<img src="flappy/bird0.png" alt="">
+<img src="flappy/bird1.png" alt="">
+<img src="flappy/bird2.png" alt="">
+<img src="flappy/pipe1.png" alt="">
+<img src="flappy/pipe2.png" alt="">
+<img src="flappy/die.png" alt="">
+<script type="text/javascript">
+/***
+ * 爱创课堂
+ * site 	http//:www.icketang.com
+ * writer 	zhangrongming
+ ***/
+window.onload = function(){
+	//UI设置
+	var canvas = document.getElementsByTagName('canvas')[0],
+		h1 = document.getElementsByTagName('h1')[0],
+		bgs = document.getElementById('container').getElementsByTagName('div'),
+		imgs = document.getElementsByTagName('img'),
+		beginDom = h1.getElementsByTagName('span')[0],
+		overDom = h1.getElementsByTagName('span')[1],
+		gameText = document.getElementsByTagName('p')[0],
+		overText =h1.getElementsByTagName('p')[0];
+
+	// 获取画布
+	var ctx = canvas.getContext("2d");
+	
+	//画布尺寸
+	var canvasWidth = canvas.width;
+	var canvasHeight = canvas.height;
+	
+	//变量声明
+	var pipeArr = [],
+		player = null,
+		bgArr = [];
+
+	var timer = null,
+		playGames = false,
+		timecount = 0;
+
+	var pipeR = 70,		// 管子半径	
+		speed = 2,		// 运行速度
+		distance = 0,	// 移动的距离
+		space = 500,	// 管子间隔
+		pipeLen = 0,	// 存放管子数组
+		bgImgPos = [208, 285, 500];
+	
+	//类定义
+	var Pipe = function(x, h, dir){
+		this.x = x;
+		this.h = h;
+		this.dir = dir;
+		this.img = dir ? imgs[3] : imgs[4];
+		this.imgY = dir ? 1664 - h : 0;
+	}
+	
+	Pipe.prototype = {
+		move : function() {
+			this.x -= speed;
+		},
+		checkOut : function(){
+			return this.x < -pipeR;
+		},
+		draw : function(){
+			var y = this.dir ? 0 : 500 - this.h;
+			ctx.drawImage(this.img, 0, this.imgY, pipeR * 2 + 8, this.h, this.x - pipeR, y, pipeR * 2, this.h);
+		},
+		init : function(){
+			this.move();
+			this.draw();
+		}
+	};
+
+	var Bg = function(dom, x, y, vx){
+		this.dom = dom;
+		this.x = x;
+		this.y = y;
+		this.vx = vx;
+	}
+	Bg.prototype = {
+		move : function(){
+			this.x -= this.vx;
+		},
+		checkOut : function(){
+			if(this.x < -1200){
+				this.x += 1200;
+			}
+		},
+		draw : function(){
+			this.dom.style.backgroundPosition = this.x + 'px ' + this.y + 'px';
+		},
+		init : function(){
+			this.move();
+			this.checkOut();
+			this.draw();
+		}
+	}
+
+	var Player = function(x, y){
+		this.x = x;
+		this.y = y;
+		this.hasEnergy = false;
+		this.action = 0;
+		this.die = false;
+	}
+	Player.prototype = {
+		move : function(dy){
+			if(this.hasEnergy){
+				this.y -= speed;
+			}else{
+				this.y += speed;
+			}
+			if(this.y - 30 < 0){
+				this.y = 30;
+			}
+			if(this.y + 30 > canvasHeight){
+				this.y = canvasHeight - 30;
+			}
+			this.action++;
+			if(this.action > 2){
+				this.action = 0;
+			}
+		},
+		changeEnergy : function(value){
+			this.hasEnergy = value;
+		},
+		beDie : function(){
+			this.die = true;
+		},
+		draw : function(){
+			if(this.die){
+				ctx.drawImage(imgs[5], this.x - 40, this.y - 30)
+			}else{
+				ctx.drawImage(imgs[this.action], this.x - 42, this.y - 30);
+			}
+		},
+		init : function(){
+			this.move();
+			this.draw();
+		}
+	}
+
+	function setUI(){
+		create();
+		player.init();
+		for(var i = 0; i < 3; i++){
+			bgArr[i].init();
+		}
+		gameText.innerHTML = parseInt(timecount / 1000) +' s';
+	}
+	function gameOver(){
+		playGames = false;
+		player.beDie();
+
+		ctx.clearRect(0,0,canvasWidth,canvasHeight);
+		setUI();
+
+		overDom.style.display = 'inline-block';
+		overText.style.display = 'inline-block';
+		overText.innerHTML = '用时 ' + timecount / 1000 +' s';
+	} 
+	function create(){
+		if(parseInt(distance / space) >= pipeLen){
+			pipeLen++;
+			var h = parseInt(100 + Math.random() * 300);
+			var dir = Math.random() > 0.5 ? true : false;
+			pipeArr.push(new Pipe(1100, h, dir));
+			speed++;
+		}
+		for(var i = 0; i < pipeArr.length; i++){
+			pipeArr[i].init();
+		}
+		for(var i = 0; i < pipeArr.length; i++){
+			if(pipeArr[i].checkOut()){
+				pipeArr.splice(i, 1);
+			}
+		}
+	}
+	function checkPlayer(playerObj){
+		for(var i = 0; i < pipeArr.length; i++){
+			if(pipeArr[i].dir && playerObj.y < pipeArr[i].h + 25 && Math.abs(pipeArr[i].x - playerObj.x) < (40 + pipeR)){
+				gameOver();
+			}else if(!pipeArr[i].dir && playerObj.y > (500 -  pipeArr[i].h - 25) && Math.abs(pipeArr[i].x - playerObj.x) < (40 + pipeR)){
+				gameOver();
+			}
+		}
+	}
+
+	//初始化游戏环境
+	function init(){
+		document.onkeydown = function(e){
+			// 38 top 32 space
+			if(e.keyCode == 38 || e.keyCode == 32){
+				player.changeEnergy(true);
+			}
+		}
+		document.onkeyup = function(e){
+			player.changeEnergy();
+		}
+		beginDom.onclick = function(){
+			this.style.display = 'none';
+			animate();
+		}
+		player = new Player(200, 300);
+		for(var i = 0; i < 3; i++){
+			bgArr.push(new Bg(bgs[i], 0, bgImgPos[i], speed / (3 - i)));
+		}
+		setUI()
+		playGames = true;
+	};
+	
+	//动画循环
+	function animate(){
+		//清除
+		ctx.clearRect(0,0,canvasWidth,canvasHeight);
+		
+		//动画设置
+		distance += speed;
+		timecount += 33;
+		setUI();
+		checkPlayer(player);
+		if(playGames){
+			clearTimeout(timer);
+			timer = setTimeout(animate,33);
+		}
+	};
+
+	//开始游戏
+	init();
+}
+
+</script>
+</body>
+</html>

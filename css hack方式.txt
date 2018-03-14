@@ -1,0 +1,77 @@
+	css hack方式
+
+	一、什么是css hack
+		由于不同厂商的浏览器或者某浏览器的不同版本，对css的支持、解析不一样，
+		导致在不同浏览器的环境中呈现出不一致的页面展示效果。
+		为了获得统一的页面效果，就需要针对不同的浏览器或不同版本写特定的css样式，
+		把这个针对不同的浏览器或者不同版本写相应的css code的过程 叫做css hack
+		
+	二、CSS hack分类
+		三种表现形式：属性前缀法、选择器前缀法，IE条件注释法（即HTML头部引用if IE）hack，
+		实际项目中CSS hack大部分是针对IE浏览器不同版本之间的表现差异而引入的。
+			
+			1》属性前缀法（类内部hack）：
+				例如：IE6能识别下划线_和星号*，
+					IE7能识别*，但不能识别下划线_，IE6-10都认识“\9"，但火狐前述三个都不认识。
+			
+			2》选择器前缀法（选择器hack）
+				例如：IE6能识别*html .class{},IE7能识别*+html .class{}或*:first-child+html .class{}。
+				
+			3》IE条件注释法（HTML条件注释hack）
+				针对所有IE（IE10+已经不再支持条件注释）:<!--[if IE]>IE浏览器显示的内容<![endif]-->
+				针对IE6以下版本：<!--[if It IE 6]>只在IE6-显示的内容<![endif]-->
+				
+				这类hack不仅对css生效，对写在判断语句里面的所有代码都生效。
+				
+	CSS hack书写顺序：一般是将适用范围广、被识别能力强的css定义在前面
+
+	三、CSS hack方式
+
+		1》条件注释法
+			IE浏览器专有的hack方式，微软官方推荐使用的hack方式
+			
+			栗子：
+				<!--[if IE]>这段文字只在IE浏览器显示<![endif]-->
+				
+				<!--[if IE 6]>这段文字只在IE6浏览器显示<![endif]-->
+				
+				<!--[if gte IE 6]>这段文字只在IE6+浏览器显示<![endif]-->
+				
+				<!--[if ! IE 8]>这段文字只在IE8浏览器不生效<![endif]-->
+				
+				<!--[if !IE]>这段文字在非IE浏览器生效<![endif]-->
+				
+		2》类内属性前缀法
+			即在css样式属性名前加上一些特定浏览器才能识别的hack前缀，以达到预期的页面展现效果。
+			
+				
+		3》选择器前缀法
+			即在选择器加上一些只有特定浏览器才能识别的前缀进行hack
+			目前最常见的有：
+				*html  :*前缀只对IE6生效
+				*+html ：*+前缀只对IE7生效
+				@media screen\9{...}   //只对IE6/7生效
+				@media \0screen {body{background:red;}}//只对IE8生效
+				@media \0screen\,screen\9{body{background:red;}}//只对IE6/7/8生效
+				@media screen\0{body{background:red;}}//只对IE8/9/10生效
+				@media screen and (min-width:0\0){body{background:red;}}//只对IE9/10生效
+				@media screen and (-ms-heigh-contrast:active),(-ms-high-contrast:none){body{background:red;}}//只对IE10生效
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			

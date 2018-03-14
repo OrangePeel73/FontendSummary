@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+        #outer{
+            width: 950px;
+            height: 500px;
+            border: 1px solid #ccc;
+            position: relative;
+            text-align: center;
+        }
+        .inner{
+            height: 50px; 
+            display: none;
+        }
+        .innerTd{
+            width: 100px;
+            height: 50px;
+            border-top: 1px solid #ccc;
+            border-left: 1px solid #ccc;
+            display: inline-block;
+            line-height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <!--杨辉三角形的乘法表  -->
+    <div id="outer">
+        <div class="inner"></div>
+    </div>
+    <script>
+        var outer=document.getElementById("outer");
+        var innerbox=document.getElementsByClassName('inner')[0];
+        for(var i=0 ;i<9;i++){
+            var inner=innerbox.cloneNode();
+            inner.style.display='block'
+            inner.style.width=(i+1)*100+'px';
+            outer.appendChild(inner);
+            for(var j=0;j<=i;j++){
+                var innertd=document.createElement('p');
+                innertd.className='innerTd';
+                inner.appendChild(innertd);
+                innertd.innerHTML=(i+1)+"*"+(j+1)+"="+(i+1)*(j+1)
+                if(i==8){
+                    innertd.style.borderBottom='1px solid #ccc'
+                }
+                if(j==i){
+                    innertd.style.borderRight='1px solid #ccc'
+                }
+            
+            }
+            
+        }
+        
+        
+        
+</script>
+</body>
+</html>

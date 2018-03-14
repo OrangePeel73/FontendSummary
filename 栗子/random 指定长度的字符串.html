@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+    // 随机生成指定长度的字符串
+        function random(n){
+            var str='abcdefghijklmnopqrstuvwxyz9876543210';
+            var s='';
+            var l=str.length;
+            for(var i=0;i<n;i++){
+                s+=str.charAt(Math.floor(Math.random()*l));
+            }
+            console.log(s);
+            return s;
+        }
+        random(8);
+    
+
+
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

@@ -1,0 +1,48 @@
+﻿	
+	
+一、去重
+	1》es5
+		方式一：
+				/* 从给定的字符串中剔除重复的字符，只保留一个，
+					如“aaabbccdef”，输出abcdef*/
+				// 1 for循环
+				var str="aaabbbcdec";
+				function RepeatedChar(s){
+					var arr=s.splsit("");
+					var arr2=[];
+					for(var i=1;i<arr.length;i++){
+							if(arr2[arr2.length-1]!==arr[i]){
+								arr2.push(arr[i]);
+							}
+					}
+					return arr2;
+
+				}
+				console.log(RepeatedChar(str));//Array [ "a", "b", "c", "d", "e", "c" ]
+				console.log(RepeatedChar(str).join(""));//abcdec
+		
+		方式2：s
+		// 2 forEach
+				function respet(s){
+					var arr=[];
+					s.split("").forEach(function(e) {
+						if(arr[arr.length-1]!=e){
+							arr.push(e);
+						}
+					});
+					return arr;
+				}
+				console.log(respet(str));
+				console.log(respet(str).join(""));
+				
+				
+				
+				
+	2》es5
+		方式一：
+			[...new Set(arr)]
+			
+		方式2：
+			Array.from(new Set(arr);
+
+

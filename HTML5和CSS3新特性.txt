@@ -1,0 +1,20 @@
+	
+	HTML5和CSS3新特性
+	
+	HTML5：
+		1》拖拽释放API
+		2》语义化更好的内容标签header、nav、footer、aside、section、article
+		3》音频、视频API
+		4》画布canvas API
+		5》地理 API
+		6》本地离线缓存localStorage长期存储数据，浏览器关闭后数据不丢失
+		7》sessionStorage的数据在浏览器关闭后自动删除
+		8》表单控件 date、time、email、url、search
+		
+	CSS3：
+		1》CSS3实现圆角、阴影
+		2》对文字加特效，线性渐变，旋转
+		3》增加了更多的css选择器 多背景
+		4》在CSS3中唯一引入的伪元素::selection
+		5》媒体查询 多栏布局
+		6》border-image 边框图片

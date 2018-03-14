@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+    document.write("<table width='720px'>");
+        for(var i=1;i<=9;i++){
+            document.write("<tr>");            
+            for(var j=1;j<=i;j++){
+                var r=i*j;
+                document.write("<td>"+j+"*"+i+"="+r+"</td>");
+            }
+            document.write("</tr>");   
+
+        }
+    document.write("</table >");
+    document.write("<hr>");
+
+     document.write("<table width='720px'>");
+        for(var i=1;i<=9;i++){
+            document.write("<tr>");            
+            for(var j=1;j<=(10-i);j++){
+                var r=(10-i)*j;
+                document.write("<td>"+j+"*"+(10-i)+"="+r+"</td>");
+            }
+            document.write("</tr>");   
+
+        }
+    document.write("</table >");
+    document.write("<hr>");
+
+    document.write("<table width='720px'>");
+        for(var i=1;i<=9;i++){
+            document.write("<tr>");   
+            for(var j=1;j<=i;j++){document.write("<td>"+"</td>");}         
+            for(var j=i;j<=9;j++){
+                var r=(10-i)*(10-j);
+                document.write("<td>"+(10-j)+"*"+(10-i)+"="+r+"</td>");
+            }
+            document.write("</tr>");   
+
+        }
+    document.write("</table >");
+     document.write("<hr>");
+
+    document.write("<table width='720px'>");
+        for(var i=1;i<=9;i++){
+            document.write("<tr>");   
+            for(var j=1;j<=(10-i);j++){document.write("<td>"+"</td>");}         
+            for(var j=(10-i);j<=9;j++){
+                var r=j*i;
+                document.write("<td>"+j+"*"+i+"="+r+"</td>");
+            }
+            document.write("</tr>");   
+
+        }
+    document.write("</table >");
+    document.write("<hr>");
+
+
+    // 4行7列 列=2*行数-1
+    document.write("<table >");
+    //上半部分
+    for(var i=1;i<=7;i++){
+        document.write("<tr>");
+        for(var j=1;j<=(7-i);j++){//7为行数
+            document.write("<td>"+"</td>");            
+        }
+        for(var j=(8-i);j<=(i+6);j++){//从j=2i/2 开始， 每行的列数=前面的空+后面占用的列=（7-i）+（2i-1）=i+6
+            document.write("<td>"+"*"+"</td>");
+        }
+        document.write("</tr>"); 
+    }
+    //下半部分
+    for(var i=1;i<=6;i++){
+        document.write("<tr>");
+        for(var j=1;j<=i;j++){
+            document.write("<td>"+"</td>");            
+        }
+        for(var j=i;j<(13-i);j++){//从j=i开始， 每行的列数=前面的空+后面占用的列=i+(7-i)*2-1=13-i
+            document.write("<td>"+"*"+"</td>");
+        }
+        document.write("</tr>");
+        
+    }
+    document.write("</table >");
+    document.write("<hr>");
+
+
+
+    
+    
+
+</script>
+</head>
+<body>
+    
+</body>
+</html>

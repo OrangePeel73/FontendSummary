@@ -1,0 +1,76 @@
+﻿
+	CSS常见浏览器兼容问题及解决方法
+	
+	1》不同浏览器的标签默认的外补丁和内补丁不同
+		问题描述：随便写几个标签，不加样式控制的情况下，各自的margin和padding差异较大
+		解决：*{margin：0；padding0；}
+	
+	2》块属性标签float后，又有横行的margin情况下，在IE6显示margin比设置的大。
+		描述：IE6后面的一块被顶到下一行
+		解决：在float的标签样式中加上display：inline将其转为行内元素
+		
+		我们最常用的就是div+css布局，二div就是一个典型的块属性标签，
+		横向布局时我们通常利用float实现，横向的间距如果用margin实现，
+		这就是我们必然会碰到的兼容性问题。
+		
+	3》设置较小高度标签（一般小于10px），在IE6 7遨游中高度都超出自己设置的高度
+		描述：IE6 7和遨游里这个标签的高度不受控制，超出自己设置的高度
+		原因：IE8-的浏览器都会给标签一个默认的行高的高度，即使你的标签时空的，他的高度还是会达到默认的行高。
+		解决：给超出高度的标签设置overflow：hidden，或者设置行高line-height小于你设置的高度。
+		
+	4》行内属性标签，设置display：block后采用float布局，又有横行的margin的情况，IE间距bug
+		描述：IE6的间距比超过设置的间距
+		解决：在display：block后加上display：inline-block；display：table
+		
+		
+	5》图片默认有间距
+		描述：几个图片ing放一起时，有些浏览器会有默认的间距，加了*{margin：0；padding：0}也不起作用
+		解决：使用float为img布局
+		
+	6》a标签中嵌套img时，img默认会有1px的border，
+		解决：在CSS中加入a img {border:none;}。	
+		
+	7》a标签中嵌套img时，必须有a{dispaly:block;}否则在IE6下将影响布局（即在图片下方多出一部分空白）。	
+		
+	8》未使用float浮动时，内层标签的margin值撑不开外层标签，而内层标签的padding值则可以撑开。	
+		
+	9》margin-left/righ产生双倍间距解决：
+		解決：display：inline；
+		
+	10》不同浏览器默认的内边距不同的问题
+		解决：*{margin：0；padding：0}
+		
+	11》不同浏览器垂直居中的问题
+		描述：文本设置vertical-align：middle，文本框内容不会垂直居中
+		解决：给容器设置一个与其高度相同的行高line-height
+		
+	12》不同浏览器关于高度问题
+		解决：设置overflow：hidden或者高度自增height：auto；
+	
+	13》div嵌套p时出现行空白问题
+		解决：设置p的margin：0；在设置div的padding-top，padding-bottom
+		
+	14》IE6双倍间距问题
+		IE6设置margin又设置float时会出现双倍间距问题
+		解决：display：inline
+		
+	15》子容器浮动后，父容器高度没有撑开问题
+		子容器float，父容器没有设置高度 ，父容器高度就不会被撑开
+		解决：给父容器设置高度、为父容器添加overflow：hidden，为非浮动元素添加clear：both
+			或内墙法，外墙法，伪元素 ，clearfix
+			
+	16》ul标签默认值问题
+		ul标签在ff中默认是有padding值，而在IE中只有margin有值
+		解决：定义ul{margin：0；padding：0；}
+		
+	17>ul或li浮动后 显示在div外问题
+		解决：在ul标签后添加<div style="clear:both"></div>来闭合外层的div
+	
+	18》ul或li浮动后，margin变大问题
+		解决：对于ul浮动：ul{display：inline},li{list-style-position:outside}
+			li浮动：li{dispaly:inline}
+		
+		
+		
+		
+		

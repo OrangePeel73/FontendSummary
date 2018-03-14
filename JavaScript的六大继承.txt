@@ -1,0 +1,220 @@
+﻿	JavaScript的六大继承
+		JavaScript支持实现继承，不支持接口继承，实现继承主要依靠原型链来实现
+		
+		1》原型链继承
+			1>基本思想：让一个原型对象指向另一个类型的实例
+			
+			2>实现的本质：重写原型对象，代之以一个新类型的实例，
+						存在one的实例中的所有属性和方法，也存在two中。
+						
+			
+			3>
+				function one(){
+					this.property=true;
+				}
+				one.prototype.getValue=function(){
+					return this.property;
+				}
+				function two(){
+					this.subProperty=false;
+				}
+				two.prototype=new one();
+				two.prototype.getTwo=function(){
+					return this.subProperty;//不能采用字面量的形式添加方法
+				}
+				var a=new two();
+				console.log(a.getValue());//true
+				
+				在创建一个实例时，，实例对象中会有一个内部指针指向它的原型，进行关联起来，
+				two.prototype=new one(),也会在two.prototype创建一个内部指针，指向one，将two.prototype与one关联起来。
+				所以a指向two原型，two的原型又指向one的原型，继而在a在调用getValue方法时会顺着这条链一直往上找。
+				
+				添加方法：	
+					gei two原型添加方法时，如果父类也有同样的名字，two将会覆盖这个方法达到重新的目的，但是这个方法仍然存在父类中。
+					不能以字面量的形式添加方法：
+					如two.prototype=function(){
+							getTwo:function(){
+								return this.subProperty;
+							}		
+					   }
+			
+			
+			4>原型链继承问题：
+				单纯的使用原型链继承，主要问题来自包含引用类型值的原型--地址传递问题
+				字面量重写原型会中断关系
+				
+				在one构造函数定义color属性，当two通过原型链继承后，这个属性就会出现在two.prototype中，
+				就跟专门创建了two.prototype.color一样，所以会导致two所有实例都会共享这个属性，
+				a修改了color这个引用类型值，也会反映到b中
+				
+				function one(){
+					this.color=['red','blue','green']
+				}
+				function two(){}
+				two.prototype=new one();
+				var a=new two();
+				var b=new two();
+				a.color.push('black');
+				console.log(a.color);//red blue green black
+				console.log(b.color);//red blue green black
+		
+		2》借用构造函数继承
+			1>此方法解决了原型链中包含引用类型值所带来的问题
+			
+			2>基本思想
+				在子类构造函数的内部调用父类构造函数，可以借助call（），apply（）方法来改变对象的执行上下文
+			
+			3>
+				function one(){
+					this.color=['red','blue','green']
+				}
+				function two(){
+					one.call(this);
+				}
+				var a=new two();
+				var b=new two();
+				a.color.push('black');
+				console.log(a.color);//red blue green black
+				console.log(b.color);//red blue green 
+				
+				z在新建two实例时调用了one构造函数，会在新two对象上执行one函数中定义的所有对象初始化代码。
+				two的每个实例都有自己的color属性
+				
+			4>传递参数
+				借助构造函数的优势还有就是可以传递参数
+				function one(name){
+					this.name=name;
+				}
+				function two(){
+					one.call(this,job);
+					this.job=job;
+				}
+				var a=new two('tom','student');
+				console.log(a.name);//tom
+				console.log(a.job);//student
+				
+			5>构造函数继承问题
+				仅仅借助构造函数，方法都在构造函数中定义的，因此函数无法达到复用。
+				
+				
+		
+		3》组合继承（原型链继承+构造函数）
+			1> 优势：将原型链继承和构造函数结合起来，从而发挥二者之长的一种模式。
+					  通过原型上定义的方法实现了函数复用，又能够保证每个实例都有自己的属性
+					  避免了原型链个构造函数继承的缺点，融合了他们的优点，是最常用的一种继承模式
+			2> 思路：使用原型链实现对于原型属性和方法的继承
+				  使用构造函数继承来实现对实例属性的继承
+			
+			3>
+				function one（name）{
+					this.name=name
+					this.color=['red','blue','green']
+				}
+				one.prototype.sayName=function(){console.log(this.name)}
+				
+				function two(name,job){
+					one.call(this,name);//继承属性
+					this.job=job;
+				}
+				two.prototype=new one();//继承方法
+				two.prototype.sayJob=function(){console.log(this.job);}
+				
+				var a=new two('terry;,'student');
+				a.color.push('black');
+				console.log(a.color);//['red','blue','green','black']
+				a.sayName();//terrry
+				a.sayJob();//student
+		
+		
+		4》原型式继承
+			1>优点：
+				借助原型可以基于已有的对象创建新的对象，同时不必创建自定义类型
+				
+			2>这种模式必须有一个对象作为另一个对象的基础，person作为另一个对象的基础，
+				该函数返回一个新的对象，新对象将person作为原型，所哟它的原型就包含一个基本数据类型和一个引用类型。
+				意味着还有一个对象关联了person，p修改数组的name时也会体现在person对象中
+				function obj(o){
+					function F(){}
+					F.prototype=o;
+					return new F();
+				}
+				var person={
+					name:"tom",
+					age:12
+				}
+				var p=obj(person);
+				console.log(p.name);//tom
+				
+				在obj函数内部先创建一个临时性的构造函数，
+				然后将传入的对象作为这个构造函数的原型，
+				最后返回这个临时类型的一个新实例。
+				本质上说，就是obj对传入其中的对象执行了一次浅复制。
+				
+			3>Object.create()方法
+				es5通过该方法规范了原型式继承，可以接受两个参数，
+				一个是作新对象原型的对象和一个可选的为新对象定义额外属性的对象，
+				行为相同，基本用法和上面的object一样，除了object不能接受第二个参数以外
+				var person={
+					name:"tom",
+					age:12
+				}
+				var p=Object.create(person);
+				console.log(p.name);//tom
+		
+		5》寄生式继承
+			1>思路:与寄生构造函数和工厂模式类似，创建一个仅用于封装继承过程的函数
+			
+			2>
+				function create(o){
+					var clone=Object.create(o);//创建一个新对象
+					clon.sayHello=function(){console.log("hello")}//添加方法：
+					return clone;
+				}
+				var person={
+					name:'tom'
+				}
+				var p=create(person);
+				p.sayHello();
+			
+				基于person返回了一个新对象p，p不仅拥有了person的属性和方法，还有自身的sayHello方法
+				在主要考虑对象而不是自定义类型和构造函数的情况下，这是一个有用的模式。
+			
+		6》寄生组合式继承
+			在第三种继承（组合继承：原型链+构造函数继承）中。继承的时候需要调用两次父类构造函数
+			第一次在函数function two(name,job){
+					one.call(this,name);//继承属性
+					this.job=job;
+				}
+			第二次在two.prototype=new one();//继承方法；
+			
+			使用new one()时，会产生两组name和color,一组在two实例上，一组在two原型上，只不过实例上的屏蔽了原型上的。
+			
+			1>优点：避免了组合继承产生的调用两次父类构造函数的问题
+		
+			2>该模式借用构造函数来继承属性，通过原型链的混合模式继承方法；
+			
+			3>基本思路：不必为了指定子类型的原型而调用父类的构造函数，需要的就是父类原型的一个副本
+
+			4>本质上就是使用寄生式继承来继承父类的原型，再将结果指定给子类型的原型
+			
+			5>
+				function inherit(two,one){
+					var prototype=Object.create(one.prototype);//创建父类原型的副本
+					prototype.constructor=two;//将创建的副本添加construtor属性=子类
+					two.prototype=prototype;//将子类的原型指向这个副本
+				}
+				该函数接受两个参数，一个子类two，一个父类one
+				
+				function one(name){
+					this.name=name;
+					this.color=['red','blue','green'];
+				}
+				one.prototype.sayHello=function(){console.log(this.name);}
+				
+				function two(name,job){
+					one.call(this,name);//继承属性
+					this.job=job;
+				}
+				inherit(two,one);//继承
+				var obj=new two('harry','student')
+				obj.sayHello();//harry

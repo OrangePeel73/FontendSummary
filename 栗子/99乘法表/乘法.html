@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>99乘法表</title>
+    <script>
+        // 右上角对齐
+        document.write("<table width='720px'>");
+        for(var i=1;i<=9;i++){
+            document.write("<tr>");            
+            for(var j=1;j<=9;j++){
+                for(j=1;j<i;j++){
+                    document.write("<td>"+"</td>");            
+                }                               
+
+                for(j=i;j<=9;j++){
+                    var r=(10-i)*(10-j);
+                    document.write("<td>"+(10-j)+"*"+(10-i)+"="+r+"</td>"); 
+                }  
+            }
+            document.write("</tr>");                        
+        }
+        document.write("</table>");
+
+        //左下角对齐
+        document.write("<table width='720px' > ");
+        for(var i=1;i<=9;i++){
+            document.write("<tr>");            
+            for(var j=1;j<=i;j++){
+                var r=i*j;
+                document.write("<td>"+j+"*"+i+"="+r+"<td>");
+            }
+           document.write("</tr>");
+        }
+        document.write("</table>");
+        document.write("</br>");
+
+
+        //左上角
+        document.write("<table width='720px' > ");        
+        for(var i=1;i<=9;i++){
+            document.write("<tr>");            
+            for(var j=1;j<=10-i;j++){
+              var r=(10-i)*j;
+                document.write("<td>"+j+"*"+(10-i)+"="+r+"<td>");
+            }
+            document.write("</tr>");
+        }
+        document.write("</table>");
+//右下对齐
+        document.write("<table width='720px' > ");
+        for(var i=1;i<=9;i++){
+            document.write("<tr>");
+            for(var j=1;j<=9;j++)
+            {
+                for(j=1;j<(10-i);j++){
+                     document.write("<td>"+"</td>");
+                 }
+                 for(j=(10-i);j<=9;j++)
+                 {
+                    var r=i*(10-j);
+                    document.write("<td>"+(10-j)+"*"+i+"="+r+"&nbsp"+"</td>");
+                 }
+
+            }
+            document.write("</tr>");    
+        }
+        document.write("</table>");
+        document.write("</br>");
+        
+
+        
+         
+
+</script>
+</head>
+<body>
+    
+</body>
+</html>

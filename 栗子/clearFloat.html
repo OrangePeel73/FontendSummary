@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>7种清除浮动方法</title>
+    <style>
+        /*原来布局  */
+        .demo1{
+            border: 1px solid #ccc;
+            background-color: red;
+            /*1 为浮动元素父元素添加宽高（解决浮动元素父元素高度没有撑开的问题）  */
+          /*  width: 400px;
+            height: 200px;*/
+            /*2 为浮动元素的父元素添加overflow：hidden  
+                （解决浮动元素父元素高度没有撑开的问题）
+                */
+            /* overflow: hidden; */
+        }
+        .demo2{
+            border: 1px solid #ccc;
+            background-color: green;
+            /* width: 400px;
+            height: 200px; */
+            /*3 clear：both布局  弊端：没有解决浮动元素父元素高度没有撑开的问题）
+                在浮动元素后面的元素添加样式clear：both 让浮动元素后面的元素不跟着浮动元素继续浮动
+              */
+            /*clear: both;*//*3 clear：both布局 */
+        }
+        ul li{/*原来布局  */
+            float: left;
+            width: 100px;
+            height: 100px;
+            border: 1px solid salmon;
+            background-color: darkgoldenrod
+        }
+        /*4 外墙法 （弊端：没有解决浮动元素与非浮动元素元素的父元素高度没有撑开的问题）
+             在浮动元素的父容器与非浮动元素添加一个div, 并未div添加样式clear：both
+            */
+        /*.clear{clear: both;}*/
+
+
+        /*5 内墙法 （解决了浮动元素的父元素高度没有撑开的问题）
+            在浮动元素的父元素的结尾处添加一个div 并为div添加样式clear：both
+                
+          */
+         /* .clear{clear: both;}*/
+          
+           
+         /* 6 伪元素 (解决了浮动元素父元素高度没有撑开的问题)
+            跟内墙法很像 都是在浮动元素父元素的结尾处添加伪类，
+            不同于内墙法的是：伪元素清除浮动的实现没有在父元素中插入其他子元素
+                            而是在样式中通过伪元素实现清除浮动来保持父元素的整洁性
+          */
+         /*.demo1::after{
+               content: '';
+                display: block; /*必要样式 没有设置就没有实现*/ 
+              /* clear: both;}*/
+        
+
+        /*7 clearfix---常用 正规 推荐用法(解决了浮动元素父元素高度没有撑开问题)
+            （1）首先创建一个类样式clearfix 
+                .clearfix{} .clearfix::after{content:'';displiay:block;clear:both} 
+            (2)为浮动元素父元素添加class="clearfix"
+          */
+          .clearfix{}
+          .clearfix::after{
+              content: '';
+              clear: both;
+              display: block;
+          }
+    </style>
+</head>
+<body>
+    <ul class="demo1 clearfix"><!--6 伪元素 为该快添加伪类 -->
+        <li></li>
+        <li></li>
+        <!-- <div class="clear"></div> --><!--5 内墙法 -->
+         
+    </ul>
+    <!--<div class="clear"></div>--><!--4 外墙法 -->
+    <ul class="demo2">
+        <li></li>
+        <li></li>
+    </ul>
+</body>
+</html>

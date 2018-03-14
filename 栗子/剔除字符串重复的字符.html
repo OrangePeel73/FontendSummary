@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        /* 从给定的字符串中剔除重复的字符，只保留一个，
+            如“aaabbccdef”，输出abcdef*/
+        // 1 for循环	
+
+        function quchong(s){
+            var arr=s.split('');
+            var arr2=[];
+            for(var i=0;i<arr.length;i++){
+                var flag=true;
+                for(var j=0;j<arr2.length;j++){
+                    if(arr2[j]==arr[i]){//1相等时结束当前循环，跳出当前循环
+                        flag=false;
+                        break;
+                    }
+
+                }
+                if(flag==false){
+                    continue;//2结束当前arr的循环 继续i++的循环
+                }
+                arr2.push(arr[i]);
+
+            }
+            return arr2.join('');
+        }
+        console.log(quchong('aassffdgdasvbvbnnxx'));
+
+        // 字符串出现次数最多的字母和次数
+        function count(str){
+            var obj={};//存放所有字母出现的个数
+            str.split('').forEach(function(element) {
+                if(!obj[element]){
+                    obj[element]=1;
+                }
+                else{
+                    obj[element]++;
+                }
+            });
+            // 计算次数最多
+            var max=0,index;
+            var obj1={};
+            for(var e in obj){
+                if(obj[e]>max){
+                    max=obj[e];
+                    index=e;
+                    obj1={i:max}
+                }
+            }
+            // return obj;
+            return obj1;
+        }
+        
+        console.log(count('sdfsdfsdfghjskjkhdsasde'));
+</script>
+</head>
+<body>
+    
+</body>
+</html>
